@@ -1,23 +1,31 @@
 # GCP Healthcare API - FHIR Datastore Interaction
 
-## How to use
+## Execution Guide
 
-- Clone repo
-- Set up python virtual environment
-- Source virtual environment, install requirements `pip install -r requirements.txt`
+- Clone this repo 
+- Set up Python 3 (must be Python 3) virtual environment `python3 -m virtualenv venv`
+- Source virtual environment `source venv/bin/activate`
+- Install python requirements `pip install -r requirements.txt`
 - Make sure gcloud healthcare API is enabled, and that a dataset with a FHIR datastore is created (R4 spec is recommended)
-- Run main script with needed variables: 
-    ```
-    python code.py \
-    --action=[Get or Create] \
-    --resource_type=[FHIR resource type e.g., Patient or Organization or Claim] \
-    --resource_path=[Path to JSON that has resource definition, examples in resources] \
-    --credentials=[/path/to/credentials] \
-    --project_id=[Project_ID] \
-    --cloud_region=[Preferred_Region] \
-    --fhir_dataset=[FHIR_Dataset_ID] \
-    --fhir_datastore=[FHIR_Datastore_ID]
-    ```
+
+*Ensure the following (these are checked during the shell script init anyways, but saves you some time upfront if you confirm all is in order)*
+1. GOOGLE_APPLICATION_CREDENTIALS environment variable is set to your service account credentials file (not sure? `echo $GOOGLE_APPLICATION_CREDENTIALS`)
+2. Ensure that you have ran `gcloud init` and set a default region and project
+3. Ensure that you have created a FHIR dataset within the default region and project in (3) [GCP Healthcare Browser](https://console.cloud.google.com/healthcare)
+4. Ensure that you have created a FHIR datastore within the dataset mentioned in (4) [GCP Healthcare Browser](https://console.cloud.google.com/healthcare)
+
+Finally - execute the run.sh file with arguments for:
+- action (either Create or Get)
+- resource_type (Claim/Coverage/Patient etc. just make sure you have a corresponding resource JSON) 
+- resource_path (resources/Claim.json)
+- Example: `bash run.sh Create Patient resources/Claim.json`
+
+## FHIR
+
+Resource Examples (in resources folder) are sourced from respective FHIR example pages: 
+- Claim: https://www.hl7.org/fhir/r4/claim-examples.html
+- Patient: https://www.hl7.org/fhir/r4/patient-examples.html
+
 
 ## Overview
 

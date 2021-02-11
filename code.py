@@ -27,7 +27,13 @@ def parse_command_line_args():
     )
 
     parser.add_argument(
-        "--cloud_region",
+        "--resource_id",
+        default=None,
+        help="Google cloud project id (not fully qualified)",
+    )
+
+    parser.add_argument(
+        "--region",
         default="us-west2",
         help="Cloud region to use",
     )
@@ -108,8 +114,7 @@ def get_session(service_account_json):
     return session
 
 def create_resource(resource_type, claim_path):
-    url = f"{base_url}/projects/{project_id}/locations/{cloud_region}"
-    fhir_store_path = f"{url}/datasets/{dataset_id}/fhirStores/{fhir_store_id}/fhir/{resource_type}"
+    fhir_store_path = f"{base_url}/datasets/{dataset_id}/fhirStores/{fhir_store_id}/fhir/{resource_type}"
     headers = {"Content-Type": "application/fhir+json;charset=utf-8"}
     with open(claim_path) as f: 
         resource_content = json.load(f)
@@ -150,11 +155,8 @@ def search_resources_get(resource_type):
 
     It uses the searchResources GET method.
     """
-    url = "{}/projects/{}/locations/{}".format(base_url, project_id, cloud_region)
 
-    resource_path = "{}/datasets/{}/fhirStores/{}/fhir/{}".format(
-        url, dataset_id, fhir_store_id, resource_type
-    )
+    resource_path = f"{base_url}/datasets/{fhir_dataset}/fhirStores/{fhir_datastore}/fhir/{resource_type}"
 
     response = session.get(resource_path)
     response.raise_for_status()
@@ -171,6 +173,21 @@ def search_resources_get(resource_type):
     return resources
 
 def get_resource(resource_type, resource_id):
+    # Prepare request
+    resource_path = f"{base_url}/datasets/{dataset_id}/fhirStores/{fhir_store_id}/fhir/{resource_type}/{resource_id}"
+    headers = {"Content-Type": "application/fhir+json;charset=utf-8"}
+
+    # Execute request
+    response = session.get(resource_path, headers=headers)
+    response.raise_for_status()
+    resource = response.json()
+
+    # Print results
+    print("Got {} resource:".format(resource["resourceType"]))
+    print(json.dumps(resource, indent=2))
+
+    # Return results
+    return resource
 
 # Parse arguments
 parser = parse_command_line_args()
@@ -179,17 +196,23 @@ project_id = parser.project_id
 cloud_region = parser.region
 dataset_id = parser.fhir_dataset
 fhir_store_id = parser.fhir_datastore
+resource_type = parser.resource_type
+resource_path = parser.resource_path
+resource_id = parser.resource_id
+
 
 # Initialize session and client
-base_url = "https://healthcare.googleapis.com/v1"
+api_url = "https://healthcare.googleapis.com/v1"
+base_url = f"{api_url}/projects/{project_id}/locations/{cloud_region}"
+
 session = get_session(credentials)
 client = get_client(credentials)
 
 if parser.action == "Create":
-    create_resource(parser.resource_type, parser.resource_path)
+    create_resource(resource_type, resource_path)
 
 if parser.action == "Get":
-    get_resource(parser.resource_type, parser.resource_id)
+    get_resource(resource_type, resource_id)
 
 # search_response = search_resources_get("Patient")
 
