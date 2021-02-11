@@ -18,7 +18,7 @@ Finally - execute the run.sh file with arguments for:
 - action (either Create or Get)
 - resource_type (Claim/Coverage/Patient etc. just make sure you have a corresponding resource JSON) 
 - resource_path (resources/Claim.json)
-- Example: `bash run.sh Create Patient resources/Claim.json`
+- Example: `bash run.sh Create Patient resources/Patient.json`
 
 ## FHIR
 
