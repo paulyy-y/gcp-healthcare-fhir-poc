@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 export action=$1
 export resource_type=$2
 export resource_path=$3

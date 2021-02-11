@@ -139,7 +139,6 @@ resource_type = parser.resource_type
 resource_path = parser.resource_path
 resource_id = parser.resource_id
 
-
 # Initialize session and client
 api_url = "https://healthcare.googleapis.com/v1"
 base_url = f"{api_url}/projects/{project_id}/locations/{cloud_region}"

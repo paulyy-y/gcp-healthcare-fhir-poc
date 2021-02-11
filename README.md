@@ -26,6 +26,15 @@ Resource Examples (in resources folder) are sourced from respective FHIR example
 - Claim: https://www.hl7.org/fhir/r4/claim-examples.html
 - Patient: https://www.hl7.org/fhir/r4/patient-examples.html
 
+FHIR R4 Overview https://www.hl7.org/fhir/r4/
+
+FHIR Specifications: R4, STU3, DSTU1 (R4 being newest)
+
+## Potential Improvements
+
+- Web UI POC (browse datasets/datastores/resources)
+- Pub/Sub Integration (Out-of-Box Support)
+- BigQuery Integration (Out-of-Box Support)
 
 ## Overview
 
