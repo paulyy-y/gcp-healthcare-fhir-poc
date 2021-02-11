@@ -1,4 +1,23 @@
-# GCP Healthcare API
+# GCP Healthcare API - FHIR Datastore Interaction
+
+## How to use
+
+- Clone repo
+- Set up python virtual environment
+- Source virtual environment, install requirements `pip install -r requirements.txt`
+- Make sure gcloud healthcare API is enabled, and that a dataset with a FHIR datastore is created (R4 spec is recommended)
+- Run main script with needed variables: 
+    ```
+    python code.py \
+    --action=[Get or Create] \
+    --resource_type=[FHIR resource type e.g., Patient or Organization or Claim] \
+    --resource_path=[Path to JSON that has resource definition, examples in resources] \
+    --credentials=[/path/to/credentials] \
+    --project_id=[Project_ID] \
+    --cloud_region=[Preferred_Region] \
+    --fhir_dataset=[FHIR_Dataset_ID] \
+    --fhir_datastore=[FHIR_Datastore_ID]
+    ```
 
 ## Overview
 
@@ -11,6 +30,7 @@ A single dataset can contain one or many data stores, and those stores can all s
 
 - If an application processes different types of data, such as a DICOM store used for CT scans and a FHIR store for patient data related to the CT scans.
 - To separate data according to its source hospital, clinic, department, and so forth.
+
 An application can access as many datasets or stores as its requirements dictate with no performance penalty. You can design your overall dataset and store architecture to meet your goals for locality, partitioning, access control, and so forth.
 
 The following diagram shows a single Google Cloud project containing two datasets. Each dataset contains multiple data stores, and each data store contains healthcare data:

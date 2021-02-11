@@ -15,6 +15,36 @@ def parse_command_line_args():
     )
 
     parser.add_argument(
+        "--credentials",
+        default=None,
+        help="Path to your service account credentials",
+    )
+
+    parser.add_argument(
+        "--project_id",
+        default=None,
+        help="Google cloud project id (not fully qualified)",
+    )
+
+    parser.add_argument(
+        "--cloud_region",
+        default="us-west2",
+        help="Cloud region to use",
+    )
+
+    parser.add_argument(
+        "--fhir_dataset",
+        default="us-west2",
+        help="FHIR dataset to target",
+    )
+
+    parser.add_argument(
+        "--fhir_datastore",
+        default="us-west2",
+        help="FHIR datastore to target",
+    )
+
+    parser.add_argument(
         "--resource_type",
         default=None,
         help="The type of resource. First letter must be capitalized",
@@ -23,13 +53,7 @@ def parse_command_line_args():
     parser.add_argument(
         "--resource_path",
         default=None,
-        help="The type of resource. First letter must be capitalized",
-    )
-
-    parser.add_argument(
-        "--action",
-        default=None,
-        help="Action performed by script, either Get or Create [a resource]",
+        help="The path to JSON that has resource definition, examples in resources",
     )
 
     parser.add_argument(
@@ -148,14 +172,18 @@ def search_resources_get(resource_type):
 
 def get_resource(resource_type, resource_id):
 
+# Parse arguments
 parser = parse_command_line_args()
+credentials = parser.credentials
+project_id = parser.project_id
+cloud_region = parser.region
+dataset_id = parser.fhir_dataset
+fhir_store_id = parser.fhir_datastore
+
+# Initialize session and client
 base_url = "https://healthcare.googleapis.com/v1"
-session = get_session("credentials.json")
-client = get_client("credentials.json")
-project_id = "scenic-outcome-194417"
-cloud_region = "us-west2"
-dataset_id = "macovei-healthcare"
-fhir_store_id = "r4"
+session = get_session(credentials)
+client = get_client(credentials)
 
 if parser.action == "Create":
     create_resource(parser.resource_type, parser.resource_path)
