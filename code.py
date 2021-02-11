@@ -130,7 +130,6 @@ def create_resource(resource_type, claim_path):
 
 def create_dataset(dataset_id):
     """Creates a dataset."""
-    dataset_parent = "projects/{}/locations/{}".format(project_id, cloud_region)
 
     body = {}
 
@@ -138,15 +137,15 @@ def create_dataset(dataset_id):
         client.projects()
         .locations()
         .datasets()
-        .create(parent=dataset_parent, body=body, datasetId=dataset_id)
+        .create(parent=base_url, body=body, datasetId=dataset_id)
     )
 
     try:
         response = request.execute()
-        print("Created dataset: {}".format(dataset_id))
+        print(f"Created dataset: {dataset_id}")
         return response
     except HttpError as e:
-        print("Error, dataset not created: {}".format(e))
+        print(f"Error, dataset not created: {e}")
         return ""
 
 def search_resources_get(resource_type):
@@ -155,20 +154,16 @@ def search_resources_get(resource_type):
 
     It uses the searchResources GET method.
     """
-
-    resource_path = f"{base_url}/datasets/{fhir_dataset}/fhirStores/{fhir_datastore}/fhir/{resource_type}"
+    resource_path = f"{base_url}/datasets/{dataset_id}/fhirStores/{fhir_store_id}/fhir/{resource_type}"
 
     response = session.get(resource_path)
     response.raise_for_status()
 
     resources = response.json()
+    total_resources = resources["total"]
 
-    print(
-        "Using GET request, found a total of {} {} resources:".format(
-            resources["total"], resource_type
-        )
-    )
-    print(json.dumps(resources, indent=2))
+    print(f"Using GET request, found a total of {total_resources} {resource_type} resources:")
+    print(json.dumps(resources, indent=4))
 
     return resources
 
@@ -181,9 +176,10 @@ def get_resource(resource_type, resource_id):
     response = session.get(resource_path, headers=headers)
     response.raise_for_status()
     resource = response.json()
+    resourceType = resource["resourceType"]
 
     # Print results
-    print("Got {} resource:".format(resource["resourceType"]))
+    print(f"Got {resourceType} resource:")
     print(json.dumps(resource, indent=2))
 
     # Return results
