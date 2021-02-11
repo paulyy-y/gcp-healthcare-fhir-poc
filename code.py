@@ -114,18 +114,23 @@ def get_session(service_account_json):
     return session
 
 def create_resource(resource_type, claim_path):
+    # Generate URL
     fhir_store_path = f"{base_url}/datasets/{dataset_id}/fhirStores/{fhir_store_id}/fhir/{resource_type}"
     headers = {"Content-Type": "application/fhir+json;charset=utf-8"}
+
+    # Deserialize resource definition
     with open(claim_path) as f: 
         resource_content = json.load(f)
+
+    # Execute request
     response = session.post(fhir_store_path, headers=headers, json=resource_content)
     response.raise_for_status()
     resource = response.json()
-    resource_id = resource['id']
 
+    # Catalog and display result
+    resource_id = resource['id']
     with open("resource_id.txt", "a") as f:
         f.write(f"New {resource_type} has been created with {resource_id}\n")
-
     print(f"Created {resource_type} resource with ID {resource_id}")
 
 def create_dataset(dataset_id):
