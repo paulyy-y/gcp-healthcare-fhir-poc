@@ -3,13 +3,14 @@
 ## Execution Guide
 
 - Clone this repo 
+- Install virtualenv `pip install virtualenv` or `pip3 install virtualenv`
 - Set up Python 3 (must be Python 3) virtual environment `python3 -m virtualenv venv`
 - Source virtual environment `source venv/bin/activate`
 - Install python requirements `pip install -r requirements.txt`
 - Make sure gcloud healthcare API is enabled, and that a dataset with a FHIR datastore is created (R4 spec is recommended)
 
 *Ensure the following (these are checked during the shell script init anyways, but saves you some time upfront if you confirm all is in order)*
-1. GOOGLE_APPLICATION_CREDENTIALS environment variable is set to your service account credentials file (not sure? `echo $GOOGLE_APPLICATION_CREDENTIALS`)
+1. (Should be using ADC and not a credentials file if testing from a personal account) GOOGLE_APPLICATION_CREDENTIALS environment variable is set to your service account credentials file (not sure? `echo $GOOGLE_APPLICATION_CREDENTIALS`)
 2. Ensure that you have ran `gcloud init` and set a default region and project
 3. Ensure that you have created a FHIR dataset within the default region and project in (3) [GCP Healthcare Browser](https://console.cloud.google.com/healthcare)
 4. Ensure that you have created a FHIR datastore within the dataset mentioned in (4) [GCP Healthcare Browser](https://console.cloud.google.com/healthcare)
